@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Pihl Fredriksson | Programmer</title>
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --accent: #e08040;
+        }
+
+        body {
+            box-sizing: border-box;
+            font-family: monospace;
+            background-color: var(--bg);
+            color: #b0b0b0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 1em;
+        }
+
+        main {
+            max-width: 800px;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        h2 {
+            border-bottom: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 2em;
+        }
+
+        header {
+            a {
+                color: var(--accent);
+                font-size: 2em;
+            }
+        }
+
+        main {
+            a {
+                text-decoration: none;
+                color: #61afef;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+
+        summary {
+            user-select: none;
+            color: var(--accent);
+            padding: 1em;
+
+            a {
+                float: right;
+                color: var(--accent);
+            }
+        }
+
+        details {
+            outline: 1px solid var(--accent);
+        }
+
+        .view:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        summary::marker {
+            content: "";
+        }
+
+        iframe {
+            aspect-ratio: 1 / sqrt(2);
+            /* Aspect Ratio of an A4 paper */
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        video {
+            width: 100%;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        /* Syntax Highlighting */
+        .control {
+            color: #c088c8;
+        }
+
+        .keyword {
+            color: #40a0ee;
+        }
+
+        .comment {
+            color: #888888;
+        }
+
+        .constant {
+            color: #88c888;
+        }
+
+        .string {
+            color: #da9a69;
+        }
+
+        figcaption {
+            color: #777777;
+        }
+
+        li {
+            margin-bottom: .5em;
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <main>
+            <h1>Lucas Pihl Fredriksson</h1>
+            <details>
+                <summary><span class="view">View CV</span><a href="Lucas_Pihl_Fredriksson_CV.pdf" download>Download
+                        CV</a></summary>
+                <iframe frameborder="0" src="Lucas_Pihl_Fredriksson_CV.pdf#view=FitV&toolbar=0&navpanes=0&scrollbar=0">
+                    Browser is incapable of showing inline PDF. You may download it through the button in the top right
+                    corner.
+                </iframe>
+            </details>
+            <h2>TrueType Font (TTF) Parser and Text Rendering</h2>
+            <section>
+                <h3>Background</h3>
+                <p>
+                    The reason why, I decided to dedicate my specialization to this, was due to an interesting algorithm
+                    suddenly being dedicated to the public domain, namely the <a target="_blank"
+                        href="https://github.com/EricLengyel/Slug">Slug Algorithm</a>. In the past, I have used other
+                    text
+                    rendering techniques, where the idea is to preemptively rasterize the glyphs of fonts into a font
+                    atlas
+                    (a large texture composed of numerous glyphs), and then sampling said texture to blit it unto the
+                    desired target. These methods were reliant on a font engine, such as <a href="https://freetype.org"
+                        target="_blank" rel="noopener noreferrer">FreeType</a>, to provide the developer with a
+                    convenient
+                    interface for converting a font file into these font atlases. There are primarily two kinds which
+                    are
+                    used.
+                </p>
+                <ul>
+                    <li><b>Bitmap</b>: The glyphs are rasterized, as is, and are directly rendered without the need of a
+                        specialized shader. This is the easiest to implement, as a general shader used for rendering
+                        textures would suffice. However, this techinque comes with a caveat, where the resolution of
+                        each
+                        glyph is fixed to the font atlas, meaning any divergence would either cause blurriness
+                        (upscaling),
+                        or aliasing (downscaling). To support other font sizes, subsequent font atlases must be
+                        generated to
+                        maintain quality.</li>
+                    <li><b>Signed Distance Field(SDF) and its derivatives</b>: The glyphs are still rasterized, but
+                        encode
+                        more
+                        data through multiple color channels. This allows a specialized shader to ensure the quality,
+                        even
+                        when the glyphs were generated at a much lower resolution, compared to a bitmap font atlas;
+                        furthermore, it allows more glyphs to be crammed into a singular texture, allowing for less
+                        memory
+                        usage, and potentially less draw calls when rendering large quantities of unqiue glyphs.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Rendering</h3>
+                <p>
+                    What makes the Slug Algorithm different from the aforementioned, is a change in philosophy: Suppose
+                    we
+                    could efficienctly render the vectors directly on the GPU in real-time? The algorithm works by
+                    compressing two types of data into two separate textures:
+                </p>
+                <ul>
+                    <li>Curve Texture: This texture contains the quadratic Bézier Curve data needed to render each
+                        simple
+                        glyph.</li>
+                    <figure>
+                        <img src="arial_curve_texture.jpg"
+                            alt="A visualization of the Curve Texture generated from the arial font">
+                        <figcaption>A visualization of the Curve Texture generated from the Arial font.</figcaption>
+                    </figure>
+                    <li>Band Texture: This texture contains the supplementary data needed to optimize the usage of the
+                        Curve
+                        Texture. This works by slicing the glyph, dividing it into a grid of horizontal and vertical
+                        bands,
+                        which can be used to cull irrelevant curves that do not intersect a specific band.</li>
+                    <figure>
+                        <img src="arial_band_texture.jpg"
+                            alt="A visualization of the Band Texture generated from the arial font">
+                        <figcaption>A visualization of the Band Texture generated from the Arial font.</figcaption>
+                    </figure>
+                </ul>
+                <p>
+                    Although the Slug Algorithm requires the most compute heavy shader out of the aforementioned
+                    techinques,
+                    it does also provide the highest quality. Where infinite scaling is possible, a property of vector
+                    graphics. Furthermore, if I would ever need an SDF or bitmap font atlas in the future; I could use
+                    this
+                    implementation, as I would a font engine, to generate them at any resolution, further exemplifying
+                    its
+                    usage.
+                </p>
+                <figure>
+                    <video src="arial_times.mp4" autoplay muted loop></video>
+                    <figcaption>A video showing the renderer in action; zooming out and swapping between Arial and Times
+                        New
+                        Roman.</figcaption>
+                </figure>
+            </section>
+            <section>
+                <h3>Parsing</h3>
+                <p>
+                    I made an adequately spec-compliant TrueType Font (TTF) file parser to facilitate rudimentary
+                    typesetting of single-color glyphs.
+                </p>
+                <p>
+                    To achieve this. The following Font Tables needed to be parsed:
+                </p>
+                <ul>
+                    <li><b>maxp</b>: Provides the glyph count, needed to continue parsing.</li>
+                    <li><b>head</b>: Provides the unit-to-em factor, needed to ascertain the proportions of the font.
+                    </li>
+                    <li><b>hhea</b>: Provides the metric count needed for parsing the hmtx font table.</li>
+                    <li><b>hmtx</b>: Provides an array of metrics, necessary for proper advancement and spacing of the
+                        glyphs;
+                        where if the metric count retrieved from the hhea table is lesser than the glyph count found in
+                        the
+                        maxp font table, the remaining glyphs would only use the left side bearing of the last metric
+                        entry,
+                        a compression used in certain monospace fonts.</li>
+                    <li><b>cmap</b>: Provides character maps for a wide range of formats and maps them to the glyph
+                        identifiers.
+                    </li>
+                    <li><b>loca</b>: Provides a lookup table for glyph identifiers to indices, needed for correctly
+                        mapping glyph
+                        identifiers to their respective glyph data (simple glyph and compound glyph).</li>
+                    <li><b>glyf</b>: Provides the curves within each simple glyph entry, and transformations in compound
+                        glyph
+                        entries where multiple simple glyph entries may be composited to make one.</li>
+                </ul>
+                <p>
+                    The font tables, mentioned above, are the ones used to achieve the result, as shown, in the
+                    Rendering section. This list took quite some time to condense, as there were little information on
+                    how to go from a TTF file to the two requisite textures needed for the Slug Algorithm (Curve and
+                    Band). However, through trial and error, I eventually managed to achieve a result which I am keen to
+                    use in future projects, as a lightweight dependency.
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
