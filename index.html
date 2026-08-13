@@ -11,6 +11,10 @@
             --accent: #e08040;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             box-sizing: border-box;
             font-family: monospace;
@@ -145,8 +149,22 @@
                     corner.
                 </iframe>
             </details>
-            <h2>TrueType Font (TTF) Parser and Text Rendering</h2>
-            <section>
+            <h3>Table of Contents:</h3>
+            <ul>
+                <li><a href="#ttf">TrueType Font (TTF) Parser and Text Rendering</a></li>
+                <li><a href="#game-projects">Game Projects</a></li>
+                <ul>
+                    <li><a href="#gp7">Bullseye Arena</a></li>
+                    <li><a href="#gp6">Disconnect Dead</a></li>
+                    <li><a href="#gp5">Spite: Frozen Hel</a></li>
+                    <li><a href="#gp4">Down the Rabbit Hole</a></li>
+                    <li><a href="#gp3">Myrstig</a></li>
+                    <li><a href="#gp2">Sewer Masterchef</a></li>
+                    <li><a href="#gp1">Blood Rush</a></li>
+                </ul>
+            </ul>
+            <section id="ttf">
+                <h2>TrueType Font (TTF) Parser and Text Rendering</h2>
                 <h3>Background</h3>
                 <p>
                     The reason why, I decided to dedicate my specialization to this, was due to an interesting algorithm
@@ -189,7 +207,7 @@
                 <p>
                     What makes the Slug Algorithm different from the aforementioned, is a change in philosophy: Suppose
                     we
-                    could efficienctly render the vectors directly on the GPU in real-time? The algorithm works by
+                    could efficiently render the vectors directly on the GPU in real-time? The algorithm works by
                     compressing two types of data into two separate textures:
                 </p>
                 <ul>
@@ -267,6 +285,188 @@
                     Band). However, through trial and error, I eventually managed to achieve a result which I am keen to
                     use in future projects, as a lightweight dependency.
                 </p>
+            </section>
+            <section id="game-projects">
+                <h2>Game Projects</h2>
+                <figure id="gp7">
+                    <h2>Bullseye Arena</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/x8dYtXLPML0?si=zKMnx7IML-SNEkAm"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Bullseye Arena. The 7th game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Replay System - records keyframes at a fixed tick rate, truncated to 5 seconds, of
+                            every entity and re-simulates it to give an accurate re-telling of what transpired.</li>
+                        <li>Input System - uses Win32 Raw Input API to handle the connection, disconnection, and input
+                            of
+                            Keyboards, Mice, XBOX controllers and DualSense 5 controllers. The abstraction layer
+                            allows
+                            the pairing of multiple keyboard and mouse being connected to one computer, allowing a truly
+                            novel experience for those who do not wish to play with gamepads.
+                        </li>
+                        <li>UI Navigation and Menus - since I worked on the Input System, making the menu navigations
+                            felt
+                            only right. I made a system to repeat the inputted direction to emulate the behavior found
+                            in
+                            many games which support gamepads. Furthermore, I worked on many of the menus in the game.
+                            The
+                            one I'm proudest of is the level select menu, which uses the repeat direction logic against
+                            a
+                            grid of levels, which is very satisfying to navigate through.</li>
+                    </ul>
+                </figure>
+                <figure id="gp6">
+                    <h2>Disconnect Dead</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/uxBcCUn87sQ?si=DdAugrEMHxgG1Djn"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Disconnect Dead. The 6th game I worked on. Unfortunately the trailer
+                        is cinematic more than a gameplay trailer, so most of my contributions are hidden due to the HUD
+                        not being visible (dynamic crosshair, inventory, etc.).</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Item Framework - the data structure which all items are derived from, all items have a type
+                            and
+                            parameters which change depending on the type, making it efficienctly packed and easily
+                            scalable.</li>
+                        <li>Reload System - a system inspired by Left 4 Dead. Where each gun has a reserve (ammo which
+                            is
+                            not
+                            loaded) and what is currently loaded. One may always reload, provided there is enough in
+                            reserve (handles recycling bullets already loaded, to ensure no bullet is wasted).
+                        </li>
+                        <li>Recoil and Spread - each gun has recoil applied, which nudges the camera up before returing,
+                            enhancing the feedback. There is also a spread stat, where there is a reactive crosshair
+                            which
+                            dynamically changes in size, depending on this stat, and whether or not one is moving, to
+                            accurately showcase in the frustum where a bullet may hit, which is independent of FoV.</li>
+                        <li>Inventory - another system inspired by Left 4 Dead. Which is an inventory with different
+                            reserved slots (Primary Weapon, Secondary Weapon, Throwables, and Recovery), and the
+                            necessary
+                            User Experience (UX) additions to make selecting each slot feel well (numbers, scroll wheel,
+                            and
+                            a key to quickly swap between last used items)</li>
+                    </ul>
+                </figure>
+                <figure id="gp5">
+                    <h2>Spite: Frozen Hel</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/TnuG2Z7gSmg?si=mZQGKP1uuCk-2XSl"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Spite: Frozen Hel. The 5th game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Ability Framework - a system where new abilities may easily be added, through a nice
+                            abstraction
+                            layer. An ability has some base stats (cooldown, cost, resource regeneration, and
+                            effectiveness)
+                            which is data-driven and easily tweakable without re-compilation. I also worked on
+                            implementing
+                            the logic of many of the abilities seen in the trailer.</li>
+                        <li>Resource System - made the system which the Ability Framework interfaces with to facilitate
+                            the
+                            combat in the game, since every abilitily but one (the primary ability) consumes
+                            resource/mana
+                            to activate.
+                        </li>
+                        <li>Heads-Up Display (HUD) - I worked extensively with the designers to implement the HUD. From
+                            positioning each sprite within the frame (ability icons, health and resource orbs), to
+                            properly
+                            syncing the game mechanics to reflect in the HUD (changes in health/resource, cooldown,
+                            locked
+                            abilities, etc.).
+                        </li>
+                    </ul>
+                </figure>
+                <figure id="gp4">
+                    <h2>Down the Rabbit Hole</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/xMctatufYlQ?si=ujrVjMiKLWvjZZuY"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Down the Rabbit Hole. The 4th game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Player Combat/Movement System - worked extensively with the player combat and movement to
+                            make it the controls feel tight and responsive; be it dashes, parrying, or the combo system
+                            when attacking in a row.</li>
+                        <li>Enemy/AI Combat System - was a neat experience, since I also got to work on the Player
+                            Combat System, letting me dial in the combat when fighting each of the two enemies
+                            (long-ranged enemy which actively moves away before shooting, and the melee enemy which
+                            charges in, unafraid).</li>
+                        <li>Cinematic Camera - made a cinematic camera which follows the player, whilst leaving a little
+                            space for it to catch up to make it feel less rigid. This principle is also used to make the
+                            neat panning when a new level is loaded.</li>
+                    </ul>
+                </figure>
+                <figure id="gp3">
+                    <h2>Myrstig</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/6FPj_DdZEEc?si=1nRvX7Lol0Skhl1W"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Myrstig. The 3rd game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Player Movement - worked on player movement to ensure the controls felt tight. Through
+                            thorough
+                            play-testing, the jump was made, just right, to be both punishing and rewarding.</li>
+                        <li>Slope Collision - was a neat experience to get to work on collision detection, and to apply
+                            the
+                            linear algebra I learned.</li>
+                        <li>Enemy AI - I implemented node-based pathfinding and a finite state machine to switch between
+                            it,
+                            chasing the player, and attacking when in range. Where it could lose interest and return to
+                            patrolling its delegated area.</li>
+                        <li>UI Framework and Menus - I designed and implemented all the menus in the game (Main Menu,
+                            Options Menu, and Level Select). I designed an extensible system which supported gamepad
+                            navigation (this is what I later refactored, fixed several UX issues, and refined when
+                            implementing in Bullseye Arena, the 7th game project I worked on.).</li>
+                    </ul>
+                </figure>
+                <figure id="gp2">
+                    <h2>Sewer Masterchef</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NavWfKVZiK0?si=sytdWQ_BpHONtv-w"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Sewer Masterchef. The 2nd game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Camera System - this took much longer than I expecetd to implement, as we needed a camera
+                            system which would stop moving before the frustum would go outside of the borders of the
+                            level. This allowed the camera to remain stationary when the player was moving around the
+                            edges of the levels.
+                        </li>
+                        <li>Obstacles - one notable obstacle is the fracture, where it opens more each time one moves on
+                            it.
+                            Where it would eventually break, and make the player fall.</li>
+                        <li>Sound System - although quite basic, it facilitate all sounds and music being played in the
+                            game.</li>
+                    </ul>
+                </figure>
+                <figure id="gp1">
+                    <h2>Blood Rush</h2>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/OE71BClD1VQ?si=1tS1ZJZME6MfyYWT"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <figcaption>The game trailer of Blood Rush. The 1st game I worked on.</figcaption>
+                    <h3>Notable Contributions:</h3>
+                    <ul>
+                        <li>Player Movement - I designed and implemented the player movement in the game; be it moving
+                            from
+                            left
+                            to right, jumping, or having to time when turning around a corner.</li>
+                        <li>Collectable Placement System - a simple yet elegant system for easily placing archs of
+                            collectables
+                            which aligned with the jump of the player at different speeds.</li>
+                    </ul>
+                </figure>
             </section>
         </main>
     </div>
